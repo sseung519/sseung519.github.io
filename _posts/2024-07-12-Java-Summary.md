@@ -1,0 +1,236 @@
+---
+title: "자바 상속과 다형성 개념 정리"
+date: 2024-07-12 18:45:00 +0900
+categories: [Java]
+tags: [Java]
+---
+
+# 자바 상속과 다형성 요약
+
+## 1. 상속의 기본
+- **부모 클래스 (Super Class)**: 다른 클래스에 의해 상속되는 클래스
+- **자식 클래스 (Sub Class)**: 다른 클래스에서 속성과 메서드를 상속받는 클래스
+- **메서드 오버라이딩 (Method Overriding)**: 자식 클래스가 부모 클래스의 메서드를 재정의하는 것
+- **메서드 오버로딩 (Method Overloading)**: 동일한 클래스 내에서 동일한 이름의 메서드를 매개변수의 타입이나 개수를 다르게 하여 여러 번 정의하는 것
+
+### 예제
+```java
+public class InheritanceDemo extends Object {
+    public static void main(String[] args) {
+        Horse h = new Horse();
+        h.display();
+        System.out.println(h.toString());
+    }
+}
+
+class Mammal {
+    public void display() {
+        System.out.println("나는 포유류");
+    }
+}
+
+class Horse extends Mammal {
+    @Override
+    public String toString() {
+        return "나는 제주말이야";
+    }
+
+    @Override
+    public void display() {
+        System.out.println("나는 제주말이야.");
+    }
+}
+```
+
+## 2. private 멤버
+- **private 멤버는 상속되지 않는다**. private 멤버에 접근하려면 getter와 setter 메서드를 사용해야 한다.
+
+### 예제
+```java
+public class InheritanceDemo1 {
+    public static void main(String[] args) {
+        Frog f = new Frog();
+        // f.name = "개구리"; // private이기 때문에 불가
+    }
+}
+
+class Amphibia {
+    private String name;
+    int weight;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class Frog extends Amphibia {
+}
+```
+
+## 3. static 멤버
+- **static 멤버는 상속되지 않는다**. 하지만 자식 클래스에서 접근할 수 있다.
+
+### 예제
+```java
+public class InheritanceDemo2 {
+    public static void main(String[] args) {
+        System.out.println(Student.age);
+    }
+}
+
+class Person {
+    static int age = 30;
+}
+
+class Student extends Person {
+}
+```
+
+## 4. 생성자
+- **생성자는 상속되지 않습니다**. 자식 클래스의 생성자는 부모 클래스의 생성자를 명시적으로 호출해야 한다.
+
+### 예제
+```java
+public class InheritanceDemo3 {
+    public static void main(String[] args) {
+        Sonata sonata = new Sonata("EF Sonata", 30_000_000);
+        System.out.printf("%,d", sonata.price);
+    }
+}
+
+class Car {
+    String name;
+
+    public Car(String name) {
+        this.name = name;
+    }
+}
+
+class Sonata extends Car {
+    int price;
+
+    public Sonata(String name, int price) {
+        super(name);
+        this.price = price;
+        System.out.println("나는 자식의 생성자");
+    }
+}
+```
+
+## 5. 다형성 (Polymorphism)
+- **다형성**은 부모 클래스 타입의 참조 변수를 통해 자식 클래스 객체를 참조하는 것입니다.
+
+### 예제
+```java
+public class PolyMorphiDemo1 {
+    public static void main(String[] args) {
+        String str = "Hello, World!";
+        Object original = str; // 자식이 부모형으로 자동 형변환
+        if(original instanceof String) System.out.println("된다.");
+        else System.out.println("안된다");
+    }
+}
+```
+
+### 배열을 사용한 예제
+```java
+public class PolymorphiDemo3 {
+    public static void main(String[] args) {
+        Mammal[] array = new Mammal[4];
+        array[0] = new Dog();
+        array[1] = new Cat();
+        array[2] = new American();
+        array[3] = new Korean();
+
+        for (Mammal m : array) {
+            System.out.println(m);
+            m.sayThing();
+        }
+    }
+}
+
+abstract class Mammal {
+    abstract void sayThing();
+}
+
+class Dog extends Mammal {
+    @Override
+    void sayThing() {
+        System.out.println("멍멍!");
+    }
+
+    @Override
+    public String toString() {
+        return "Dog";
+    }
+}
+
+class Cat extends Mammal {
+    @Override
+    void sayThing() {
+        System.out.println("야옹!");
+    }
+
+    @Override
+    public String toString() {
+        return "Cat";
+    }
+}
+
+class American extends Mammal {
+    @Override
+    void sayThing() {
+        System.out.println("Hello!");
+    }
+
+    @Override
+    public String toString() {
+        return "American";
+    }
+}
+
+class Korean extends Mammal {
+    @Override
+    void sayThing() {
+        System.out.println("안녕하세요!");
+    }
+
+    @Override
+    public String toString() {
+        return "Korean";
+    }
+}
+```
+
+## 6. 추상 클래스와 추상 메서드
+- **추상 클래스**는 추상 메서드(구현부가 없는 메서드)와 일반 메서드(구현부가 있는 메서드)를 모두 가질 수 있다.
+- **추상 메서드**는 하위 클래스가 반드시 구현해야 한다.
+
+### 예제
+```java
+public class AbstractDemo {
+    public static void main(String[] args) {
+        Tiger t = new Lion();
+        t.display();
+    }
+}
+
+abstract class Tiger {
+    public void print() {
+        System.out.println("나는 정상적인 메소드");
+    }
+
+    public abstract void display();
+}
+
+class Lion extends Tiger {
+    @Override
+    public void display() {
+        System.out.println("나는 자식 메소드");
+    }
+}
+```

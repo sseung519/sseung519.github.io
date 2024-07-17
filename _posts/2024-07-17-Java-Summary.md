@@ -1,0 +1,436 @@
+---
+title: "자바 프로그래밍: equals(), Generic, 컬렉션 등"
+date: 2024-07-17 21:12:00 +0900
+categories: [Java]
+tags: [Java]
+---
+# Java 프로그래밍: equals(), Generic, 컬렉션 등
+
+## EqualsDemo 설명
+
+- **기본 equals()**:
+  - 기본 `equals()` 메서드는 객체의 주소를 비교.
+  - 값을 비교하지 않음.
+  - `String` 클래스는 `equals()`를 재정의하여 값을 비교.
+
+- **Point 클래스**:
+  - `equals()` 메서드를 재정의하여 좌표 값을 비교.
+  - `(x, y)`가 동일하면 `true` 반환.
+
+```java
+public class EqualsDemo {
+    public static void main(String[] args) {
+        Point original = new Point(30, 100);
+        Point target = new Point(30, 100);
+        System.out.println(original.equals(target)); // true
+    }
+}
+
+class Point extends Object {
+    private int x, y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Point p = (Point) obj;
+        return this.x == p.x && this.y == p.y;
+    }
+}
+```
+
+## WrapperDemo 설명 
+
+- **jdk1.5 이전**:
+  - `Wrapping, Boxing`: 기본 타입을 객체로 감쌈.
+  - `Unwrapping, Unboxing`: 객체에서 기본 타입 추출.
+
+- **jdk 1.5 이후**:
+  - `Autoboxing`: 자동으로 기본 타입을 객체로 변환.
+  - `Autounboxing`: 자동으로 객체를 기본 타입으로 변환.
+
+```java
+public class WrapperDemo {
+    public static void main(String[] args) {
+        // before jdk1.5
+        int su1 = 5;
+        Integer in1 = new Integer(su1);
+        int another1 = in1.intValue();
+        System.out.println(another1);
+
+        // After jdk 1.5
+        int su2 = 5;
+        Integer in2 = su2 * 100;
+        int another2 = in2;
+        System.out.println(another2);
+    }
+}
+```
+
+## DateTimeDemo 설명 
+
+- **날짜 가져오기**:
+  1. `new Date()`
+  2. `Calendar.getInstance()`
+  3. `new GregorianCalendar(year, month, day)`
+  4. `DateFormat.getDateTimeInstance()`
+  5. `new SimpleDateFormat(pattern)`
+  6. `String.format()`
+
+```java
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+public class DateTimeDemo {
+    public static void main(String[] args) {
+        Date now = new Date();
+        System.out.println(now);
+
+        Calendar cal = Calendar.getInstance();
+        System.out.printf("오늘은 %d년 %d월 %d일입니다.%n", cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1,
+                cal.get(Calendar.DAY_OF_MONTH));
+
+        Calendar cal2 = new GregorianCalendar(2024, 11, 25);
+        System.out.printf("금년은 %d년%n", cal2.get(Calendar.YEAR));
+
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.MEDIUM, Locale.KOREA);
+        System.out.println(df.format(new Date()));
+
+        String pattern = "오늘은 yyyy년 MM월 dd일 입니다.";
+        DateFormat df2 = new SimpleDateFormat(pattern);
+        System.out.println(df2.format(new Date()));
+
+        String pattern2 = String.format("오늘은 %1tY년 %1$tm월 %1$td일입니다", new Date());
+        System.out.println(pattern2);
+    }
+}
+```
+
+## GenericDemo 설명 
+
+- **Generic**:
+  - 다양한 타입을 지원하기 위해 사용.
+  - 클래스 선언 시 `<T>`로 타입을 지정.
+
+```java
+public class GenericDemo {
+    public static void main(String[] args) {
+        Car<Integer> integerCar = new Car<>(45_000_000);
+        System.out.printf("price = %d%n", integerCar.getPrice());
+
+        Car<String> stringCar = new Car<>("10000000");
+        System.out.printf("price = %s%n", stringCar.getPrice());
+
+        Car<Double> doubleCar = new Car<>(45_000_000.0);
+        System.out.printf("price = %.1f%n", doubleCar.getPrice());
+    }
+}
+
+class Car<T> {
+    private T price;
+
+    public Car(T price) {
+        this.price = price;
+    }
+
+    public T getPrice() {
+        return price;
+    }
+
+    public void setPrice(T price) {
+        this.price = price;
+    }
+}
+```
+
+## GenericDemo1 설명 
+
+- **Generic 제한**:
+  - `<T extends Number>`: `Number`를 상속하는 타입만 사용 가능.
+  - `Vector<?>`와 같은 와일드카드 타입 사용.
+
+```java
+import java.util.Objects;
+import java.util.Vector;
+
+public class GenericDemo1 {
+    public static void main(String[] args) {
+        Object obj = "Hello";
+        Vector<Object> v1 = new Vector<String>(); // 불가능
+        Vector<?> v2 = new Vector<>(); // 가능
+        // v2.add(5); // 불가능, 와일드카드는 불변
+
+        Product<Integer> pencil = new Product<>(1000);
+        Product<Double> ballpen = new Product<>(100.0);
+        Product<Object> objProduct = new Product<>(new Car<>());
+
+        Car<?> car = new Car<>(1000);
+    }
+}
+
+class Product<T extends Number> {
+    private T price;
+
+    public Product(T price) {
+        this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(price);
+    }
+}
+```
+
+## SetDemo 설명 
+
+- **Set**:
+  - 중복 허용하지 않음.
+  - `HashSet`: 순서 보장하지 않음.
+  - `TreeSet`: 정렬된 순서 보장.
+
+```java
+import java.util.*;
+
+public class SetDemo {
+    public static void main(String[] args) {
+        String[] array = {"한지민", "박지민", "홍지민", "한지민", "홍지민", "신지민", "곽지민"};
+        Set<String> hashset = new HashSet<>();
+        Set<String> treeSet = new TreeSet<>();
+        for(String element : array) {
+            hashset.add(element);
+            treeSet.add(element);
+        }
+        System.out.println("HashSet: " + hashset);
+        System.out.println("TreeSet: " + treeSet);
+    }
+}
+```
+
+## ListDemo 설명 
+
+- **List**:
+  - 중복 허용.
+  - 인덱스로 접근 가능.
+  - `ArrayList`, `LinkedList`, `Vector` 사용 예시.
+
+```java
+import java.util.*;
+
+public class ListDemo {
+    public static void main(String[] args) {
+        String[] array ={"한지민", "박지민", "홍지민", "한지민", "홍지민", "신지민", "곽지민"};
+        Vector<String> vector = new Vector<>(3, 3);
+
+        List<String> list = new ArrayList<>(5);
+        for(String element : array) {
+            list.add(element);
+        }
+        System.out.println("현재 방 갯수 : " + list.size());
+        System.out.println(list);
+        list.remove(0);
+        System.out.println(list);
+        System.out.println(list.get(1));
+    }
+}
+```
+
+## CollectionDemo 설명 
+
+- **Collection**:
+  - 데이터 일괄 추출: `Enumeration`, `Iterator` 사용.
+
+```java
+import java.util.*;
+
+public class CollectionDemo {
+    public static void main(String[] args) {
+        String[] array ={"한지민", "박지민", "홍지민", "한지민", "홍지민", "신지민", "곽지민"};
+        Set<String> set = new HashSet<>();
+        for(String element : array) {
+            set.add(element);
+        }
+
+        Iterator<String> iters = set.iterator();
+        while(iters.hasNext()) {
+            System.out.print(iters.next() + ", ");
+        }
+
+        Vector<String> vector = new Vector<>();
+        for(String element : array) {
+            vector.add(element);
+        }
+        Enumeration<String> enums = vector.elements();
+        while(enums.hasMoreElements()) {
+            System.out.print(enums.nextElement() + ", ");
+        }
+    }
+}
+```
+
+## MapDemo 설명 
+
+- **문자열 Parsing 방법**:
+  1. `String` 클래스의 `split()` 메서드 사용.
+  2. `java.util.Scanner` 클래스의 `useDelimiter()` 메서드 사용.
+  3. `java.util.StringTokenizer` 클래스 사용.
+
+- **예제 코드**:
+  - 현재 날짜를 문자열로 변환한 후 `StringTokenizer`로 분리.
+  - 월 이름을 숫자로 변환하기 위해 `Hashtable` 사용.
+
+```java
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
+public class MapDemo {
+    public static void main(String[] args) {
+        Date now = new Date();
+        String nowStr = now.toString();
+        // 문자열 Parsing 방법 3가지
+        // 1. String class's split() String[] array = split(String regex)
+        // 2. java.util.Scanner class's useDelimiter() new Scanner(문자열).useDelimiter(String regex)
+        // 3. java.util.StringTokenizer class
+        StringTokenizer st = new StringTokenizer(nowStr);
+        String[] array = new String[st.countTokens()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = st.nextToken();
+        }
+        System.out.print("오늘은 " + array[5] + "년 ");
+        System.out.println(getMonthByName(array[1]) + "월 " + array[2] + "일입니다.");
+    }
+
+    static int getMonthByName(String month) {
+        Hashtable<String, Integer> ht = new Hashtable<>();
+        ht.put("Jan", 1); ht.put("Feb", 2); ht.put("Mar", 3); ht.put("Apr", 4);
+        ht.put("May", 5); ht.put("Jun", 6); ht.put("Jul", 7); ht.put("Aug", 8);
+        ht.put("Sep", 9); ht.put("Oct", 10); ht.put("Nov", 11); ht.put("Dec", 12);
+        return ht.get(month);
+    }
+}
+```
+
+## PropertiesDemo 설명 
+
+- **Properties 클래스**:
+  - 시스템 속성 정보를 저장하고 접근하는 데 사용.
+  - `Enumeration`을 사용하여 속성 키와 값을 출력.
+
+- **예제 코드 1**:
+  - 시스템 속성을 출력.
+
+```java
+import java.util.Enumeration;
+import java.util.Properties;
+
+public class PropertiesDemo {
+    public static void main(String[] args) {
+        Properties infos = System.getProperties();
+        Enumeration<Object> enums = infos.keys();
+        while (enums.hasMoreElements()) {
+            String key = (String) enums.nextElement(); // Object를 String으로 강제 형변환
+            System.out.println(key + "  => " + System.getProperty(key));
+        }
+    }
+}
+```
+
+- **예제 코드 2**:
+  - 파일에서 속성을 로드하고 출력.
+
+```java
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+public class PropertiesDemo1 {
+    public static void main(String[] args) throws IOException {
+        Properties info = new Properties();
+        info.load(new FileInputStream("src/productinfo.properties"));
+        System.out.println("나이 = " + info.getProperty("age"));
+        System.out.println("사는 곳 = " + info.getProperty("city"));
+    }
+}
+```
+
+## StackDemo 설명 
+
+- **Stack 클래스**:
+  - LIFO(Last In First Out) 구조를 제공.
+  - `push()`, `pop()`, `peek()` 메서드를 사용하여 요소를 추가, 제거 및 조회.
+
+- **예제 코드**:
+  - 이름 배열을 스택에 추가하고 출력.
+
+```java
+import java.util.Stack;
+
+public class StackDemo {
+    public static void main(String[] args) {
+        String[] array = {"박은화", "오승찬", "김경환", "박종호", "지소민", "박정민", "원상운"};
+        Stack<String> stack = new Stack<>();
+        for(String element : array) {
+            stack.push(element);
+        }
+        // System.out.println(stack.peek());
+        while(!stack.isEmpty()) {
+            System.out.println(stack.pop());
+        }
+    }
+}
+```
+
+## QueueDemo 설명 
+
+- **Queue 인터페이스**:
+  - FIFO(First In First Out) 구조를 제공.
+  - `add()`, `remove()`, `peek()` 메서드를 사용하여 요소를 추가, 제거 및 조회.
+
+- **예제 코드**:
+  - 이름 배열을 큐에 추가하고 출력.
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class QueueDemo {
+    public static void main(String[] args) {
+        String[] array = {"박은화", "오승찬", "김경환", "박종호", "지소민", "박정민", "원상운"};
+        Queue<String> queue = new LinkedList<>();
+        for(String element : array) {
+            queue.add(element);
+        }
+        System.out.println(queue);
+    }
+}
+```
+
+## IODemo 설명 
+
+- **입출력(Input/Output) 예제**:
+  - `InputStream`을 사용하여 콘솔에서 입력받은 문자의 ASCII 코드 값을 출력.
+
+```java
+import java.io.IOException;
+import java.io.InputStream;
+
+public class IODemo {
+    public static void main(String[] args) {
+        System.out.print("글자를 입력하세요: ");
+        InputStream is = System.in;
+        int code = 0;
+        try {
+            code = is.read(); // ASCII 코드 값 읽기
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("code = " + code);
+    }
+}
+```
+

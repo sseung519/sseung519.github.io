@@ -1,0 +1,308 @@
+---
+title: "자바 프로그래밍: 익명 클래스, 로컬 클랫, 예외 처리 및 래퍼 클래스 사용법"
+date: 2024-07-16 17:14:00 +0900
+categories: [Java]
+tags: [Java]
+---
+# Java 프로그래밍: 익명 클래스, 로컬 클래스, 예외 처리 및 래퍼 클래스 사용법
+
+## AnonymousClassDemo
+
+```java
+public class AnonymousClassDemo {
+    public static void main(String[] args) {
+        Canine ca = new Canine() {
+            @Override
+            void bark() {
+                System.out.println("왈왈왈");
+            }
+            void display() {
+                System.out.println("메소드");
+            }
+        };
+        ca.bark();
+        ca.roam();
+        ca.display(); // 컴파일 오류 발생
+    }
+}
+
+abstract class Canine {
+    abstract void bark();
+    void roam() {
+        System.out.println("여기저기 배회하다.");
+    }
+}
+```
+
+### 설명
+
+- 익명 클래스(Anonymous Class)는 Canine 추상 클래스를 확장하고 bark 메서드를 구현한다.
+- 익명 클래스 내에 display 메서드를 추가로 정의하였지만, Canine 클래스에 정의되지 않은 메서드이다.
+- ca.display(); 호출 시 컴파일 오류가 발생하는 이유는 display 메서드가 Canine 클래스에 정의되지 않았기 때문이다. 익명 클래스 타입은 여전히 Canine 타입이므로, Canine에 정의되지 않은 메서드를 호출할 수 없다.
+
+## AnonymousClassDemo1
+
+```java
+public class AnonymousClassDemo1 {
+    public static void main(String[] args) {
+        Birds bi = new Birds() {
+            @Override
+            public void fly() {
+                System.out.println("하늘을 날다.");
+            }
+
+            @Override
+            public void roam() {
+                System.out.println("여기저기 배회하다.");
+            }
+        };
+        bi.fly(); 
+        bi.roam();
+    }
+}
+
+interface Birds {
+    void fly();
+    void roam();
+}
+```
+
+### 설명
+
+- 익명 클래스가 `Birds` 인터페이스를 구현한다.
+- `Birds` 인터페이스에 정의된 `fly`와 `roam` 메서드를 구현하여 익명 클래스에서 사용할 수 있게 한다.
+- 익명 클래스 타입은 `Birds` 타입이므로 `Birds` 인터페이스에 정의된 메서드만 호출할 수 있다.
+
+## AnonymousClassDemo2
+
+```java
+public class AnonymousClassDemo2 {
+    public static void main(String[] args) {
+        AnonymousClassDemo2 acd = new AnonymousClassDemo2();
+        acd.display(new Mammal(){
+            @Override
+            public void sound() {
+                System.out.println("멍멍멍멍");
+            }
+        });
+    }
+
+    void display(Mammal m) {
+        m.sound();
+    }
+}
+
+interface Mammal {
+    void sound();
+}
+
+class Dog implements Mammal {
+    @Override
+    public void sound() {
+        System.out.println("멍멍멍멍");
+    }
+}
+```
+
+### 설명
+
+- 익명 클래스가 `Mammal` 인터페이스를 구현한다.
+- `Mammal` 인터페이스에 정의된 `sound` 메서드를 구현하여 익명 클래스에서 사용할 수 있게 한다.
+- `display` 메서드는 `Mammal` 타입을 인자로 받아 `sound` 메서드를 호출한다.
+- 익명 클래스 타입은 `Mammal` 타입이므로 `Mammal` 인터페이스에 정의된 메서드만 호출할 수 있다.
+
+## 요약
+
+- 익명 클래스는 특정 클래스나 인터페이스를 확장하거나 구현한 클래스의 인스턴스를 정의한다.
+- 익명 클래스 타입은 상위 클래스나 인터페이스 타입이므로 상위 클래스나 인터페이스에 정의된 메서드만 호출할 수 있다.
+- 상위 클래스나 인터페이스에 정의되지 않은 메서드를 익명 클래스에서 정의한 경우, 익명 클래스 타입으로는 해당 메서드를 호출할 수 없다.
+
+
+
+## ExceptionDemo
+
+```java
+import java.io.File;
+import java.util.Scanner;
+
+public class ExceptionDemo {
+    public static void main(String[] args) {
+        
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Money(반드시 숫자만 입력하세요) ? : ");
+        int money = sc.nextInt();
+        System.out.println(money);
+
+        Car carnival = new Car();
+        carnival.name = "기아 카니발";
+        System.out.println(carnival.name);
+        carnival = null; // NullPointerException
+        if (carnival != null) {
+            System.out.println(carnival.name);
+        } else System.out.println("null");
+
+        String moneyStr = "30_000_000원";
+        int intMoney = Integer.parseInt(moneyStr); // NumberFormatException
+        int [] array = {1, 2, 3, 4};
+        for (int i = 0; i <= 4; i++) { // ArrayIndexOutOfBoundsException
+            System.out.println(array[i]);
+        }
+        int[] negativeArray = new int[-3]; // NegativeArraySizeException
+
+        Scanner fileScanner = new Scanner(new File("ExceptionDemo.java")); // FileNotFoundException
+    }
+}
+
+class Car {
+    public String name;
+}
+```
+
+## ExceptionDemo1
+
+```java
+public class ExceptionDemo1 {
+    public static void main(String[] args) {
+        Car matiz = new Car();
+        matiz.name = "대우 마티즈";
+        System.out.println(matiz.name);
+        matiz = null;
+        try {
+            System.out.println(matiz.name); // NullPointerException
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("배열의 범위를 벗어났음");
+            System.out.println(e.getMessage());
+            System.out.println(e);
+            e.printStackTrace();
+        } catch (NegativeArraySizeException e) {
+            System.out.println("배열의 크기는 음수이면 안됩니다.");
+        } catch (RuntimeException e) {
+            System.out.println("여기서 잡았음");
+        }
+    }
+}
+```
+
+## Exception 종류 및 설명
+
+- **Exception**: 프로그램에서 발생할 수 있는 예외적인 상황을 나타내는 기본 클래스. 모든 예외 클래스의 상위 클래스.
+- **RuntimeException**: 실행 중에 발생할 수 있는 예외를 나타내며, 일반적으로 프로그래머의 실수로 발생한다. 이러한 예외는 컴파일러에 의해 강제되지 않으며, catch 블록에서 처리하지 않아도 된다.
+- **NullPointerException**: null 객체를 참조하려고 할 때 발생한다.
+- **ArrayIndexOutOfBoundsException**: 배열의 잘못된 인덱스에 접근하려고 할 때 발생한다.
+- **NegativeArraySizeException**: 배열의 크기를 음수로 지정하려고 할 때 발생한다.
+- **FileNotFoundException**: 지정된 파일을 찾을 수 없을 때 발생한다.
+
+## ExceptionDemo2
+
+```java
+public class ExceptionDemo2 {
+    public static void main(String[] args) {
+        a();
+    }
+    static void a() {
+        b();
+    }
+    static void b() {
+        try {
+            c();
+        } catch (ArithmeticException e) {
+            System.out.println("여기서 잡았음");
+        }
+    }
+    static void c() {
+        d();
+    }
+    static void d() {
+        System.out.println(5 / 0); // ArithmeticException
+    }
+}
+```
+
+### 설명
+
+- 예외가 발생하면 호출 스택을 따라 예외가 전달된다.
+- `ArithmeticException`이 발생하면 `b()` 메서드에서 이를 잡아 처리한다.
+- 출력 결과: "여기서 잡았음"
+
+## ExceptionDemo3
+
+```java
+public class ExceptionDemo3 {
+    public static void main(String[] args)  {
+        Student sseung = new Student();
+        sseung.setKor(100);
+        try {
+            sseung.setHistory(120); // HistoryException
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(sseung); // sseung.toString()
+    }
+}
+
+class HistoryException extends Exception { // checked Exception
+    public HistoryException(String msg) {
+        super(msg);
+    }
+}
+
+class KoreanException extends RuntimeException { // Unchecked Exception
+    public KoreanException(String msg) {
+        super(msg);
+    }
+}
+
+class Student {
+    private int kor;
+    private int history;
+    public void setHistory(int history) throws Exception {
+        if (history >= 0 && history <= 100) {
+            this.history = history;
+        } else throw new HistoryException("역사 점수는 0부터 100까지의 범위만 인정합니다.");
+    }
+    public void setKor(int kor) throws KoreanException {
+        if (kor >= 0 && kor <= 100) {
+            this.kor = kor;
+        } else throw new KoreanException("국어 점수는 0부터 100까지의 범위만 인정합니다.");
+    }
+    @Override
+    public String toString() {
+        return "kor = " + this.kor + ", history = " + this.history;
+    }
+}
+```
+
+### 설명
+
+- **Checked Exception**: 컴파일러가 예외 처리를 강제하는 예외 예: `HistoryException`.
+- **Unchecked Exception**: 컴파일러가 예외 처리를 강제하지 않는 예외 예: `KoreanException`.
+- `Student` 클래스는 `setHistory`와 `setKor` 메서드를 통해 예외를 던짐
+- `ExceptionDemo3` 클래스는 `HistoryException`을 처리하고, 출력
+
+## Java Wrapper 클래스 사용법
+
+### WrapperDemo
+
+```java
+public class WrapperDemo {
+    public static void main(String[] args) {
+        int su = 5;
+        Integer in = su * 100; // Auto boxing
+        int another = in; // Auto unboxing
+        System.out.println(another);
+    }
+}
+```
+
+### 설명
+
+- Wrapper 클래스는 기본 자료형을 객체로 감싸는 클래스.
+- `Integer` 클래스는 `int` 기본형을 감싸는 Wrapper 클래스
+- **Auto boxing**: 기본형 값을 Wrapper 객체로 자동 변환
+- **Auto unboxing**: Wrapper 객체를 기본형 값으로 자동 변환
+
+위 코드에서:
+- `su`는 기본형 `int` 값
+- `in`은 `su`를 `100`과 곱한 후 `Integer` 객체로 자동 변환된 값
+- `another`는 `in` 객체를 기본형 `int` 값으로 자동 변환한 값
+- 출력 결과: `500`

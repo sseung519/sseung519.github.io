@@ -1,0 +1,177 @@
+---
+title: "자바 기초 예제 모음 및 설명"
+date: 2024-07-11 10:25:00 +0900
+categories: [Java]
+tags: [Java]
+---
+# Java 예제 코드와 설명
+
+## 1. HelloWorld 클래스
+사용자로부터 이름을 입력받아 출력하는 간단한 코드
+
+```java
+import java.util.Scanner;
+
+public class HelloWorld {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("당신의 이름은? : ");
+        String name = sc.nextLine();
+        System.out.printf("귀하의 이름은 %s 입니다. 
+", name);
+    }
+}
+```
+
+## 2. VariableDemo 클래스
+다양한 데이터 타입과 변수 초기화 방법을 보여주는 예제 이중포문으로  구구단 출력
+
+```java
+public class VariableDemo {
+    public static void main(String[] args) {
+        short x = 10;
+        short y = 20;
+        short sum = (short)(x + y);
+
+        for (int i = 2; i <= 9; i++) {
+            for (int j = 1; j <= 9; j++) {
+                System.out.println(i + "x" + j + "=" + i * j);
+            }
+        }
+    }
+}
+```
+
+## 3. VariableDemo1 클래스
+국어와 수학 점수를 입력받아 합계를 출력하는 코드
+
+```java
+public class VariableDemo1 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("국어 점수 : ");
+        int ko = Integer.parseInt(sc.nextLine());
+        System.out.print("수학 점수 : ");
+        int mat = Integer.parseInt(sc.nextLine());
+        System.out.println(ko + mat);
+    }
+}
+```
+
+## 4. ConditionDemo 클래스
+BMI를 계산하고, 결과에 따라 건강 상태를 출력하는 코드
+
+```java
+public class ConditionDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("이름:");
+        String name = sc.nextLine();
+        System.out.print("신장(cm):");
+        double height = sc.nextDouble();
+        System.out.print("몸무게(kg):");
+        double weight = sc.nextDouble();
+        height = height / 100.0;
+        double bmi = weight / (height * height);
+
+        if(bmi < 18.5) {
+            System.out.println(name + "님은 BMI지수 " + bmi + " 이고 저체중입니다.");
+        } else if(bmi < 23) {
+            System.out.println(name + "님은 BMI지수 " + bmi + " 이고 정상체중입니다.");
+        } else if(bmi < 25) {
+            System.out.println(name + "님은 BMI지수 " + bmi + " 이고 비만전단계입니다.");
+        } else if(bmi < 30) {
+            System.out.println(name + "님은 BMI지수 " + bmi + " 이고 1단계 비만입니다.");
+        } else if(bmi < 35) {
+            System.out.println(name + "님은 BMI지수 " + bmi + " 이고 2단계 비만입니다.");
+        } else {
+            System.out.println(name + "님은 BMI지수 " + bmi + " 이고 3단계 비만입니다.");
+        }
+    }
+}
+```
+
+## 5. LoopDemo 클래스
+윤년을 판별하고 알파벳 대문자와 4의 배수를 출력하는 코드
+
+```java
+public class LoopDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("연도:");
+        int year = sc.nextInt();
+
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+            System.out.println("윤년입니다.");
+        } else {
+            System.out.println("윤년이 아닙니다.");
+        }
+
+        for (int i = 65; i <= 90; i++) {
+            System.out.printf("%c	", (char) i);
+            if ((i - 64) % 5 == 0) {
+                System.out.println();
+            }
+        }
+
+        int count4 = 0;
+        for (int j = 1; j <= 100; j++) {
+            if (j % 4 == 0) {
+                count4++;
+            }
+        }
+        System.out.println("1부터 100의 4의 배수의 갯수 " + count4);
+    }
+}
+```
+
+## 6. OpDemo 클래스
+초를 입력받아 시, 분, 초로 변환하여 출력하는 코드
+
+```java
+public class OpDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("값 입력(초단위): ");
+        int time = sc.nextInt();
+        int hour = time / 3600;
+        int minute = time % 3600 / 60;
+        int second = time % 3600 % 60;
+        System.out.println(time + "초는 " + hour + "시간 " + minute + "분 " + second + "초입니다.");
+    }
+}
+```
+
+## 7. VariableDemo 클래스와 Demo 클래스
+클래스 변수와 인스턴스 변수를 사용하여 서로 다른 클래스 간의 변수를 출력하는 예제입니다.
+
+```java
+public class VariableDemo {
+    int eng = 100; // 인스턴스 변수
+    static int math = 80; // 클래스 변수
+
+    public static void main(String[] args) {
+        int kor = 90; // 지역 변수
+        System.out.printf("수학 점수 = %d
+", VariableDemo.math);
+        System.out.printf("수학 점수 = %d
+", Demo.math);
+        System.out.printf("국어 점수 = %d
+", kor);
+
+        VariableDemo vd = new VariableDemo();
+        System.out.printf("영어 점수 = %d
+", vd.eng);
+
+        Demo d = new Demo();
+        System.out.printf("영어 점수 = %d
+", d.eng);
+    }
+}
+
+class Demo {
+    static int math = 100;
+    int eng = 50;
+}
+```
