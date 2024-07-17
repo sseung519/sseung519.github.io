@@ -118,9 +118,9 @@ comments:
   # Giscus options › https://giscus.app
   giscus:
     repo: sseung519/sseung519.github.io # <gh-username>/<repo>
-    repo_id: R_kgDOMU8T-Q
-    category: Announcements
-    category_id: DIC_kwDOMU8T-c4Cgyf4
+    repo_id: R_kgDOMW8_dw
+    category: Comments
+    category_id: DIC_kwDOMW8_d84Cg28u
     mapping: pathname # optional, default to 'pathname'
     strict: 0 # optional, default to '0'
     input_position: bottom # optional, default to 'bottom'
