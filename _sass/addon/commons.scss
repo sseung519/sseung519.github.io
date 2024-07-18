@@ -760,54 +760,27 @@ $btn-mb: 0.5rem;
     user-select: none;
   }
   // sidebar 수정중
-  .nav-link {
-    border-radius: 0;
-    font-size: 0.95rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    display: table-cell;
-    vertical-align: middle;
-  }
-
-  .nav-item {
-    text-align: center;
-    display: table;
-    height: $tab-height;
-
-    &.active {
-      .nav-link {
-        color: var(--sidebar-active-color);
-      }
-    }
-
-    &:not(.active) > a {
-      @extend %clickable-transition;
-    }
-  }
+  
   // 여기까지
   ul {
-    height: $tab-height * $tab-count;
     margin-bottom: 2rem;
-    padding-left: 0;
 
-    li{
+    li.nav-item {
+      opacity: 0.9;
       width: 100%;
-      &:last-child {
-      a {
-        position: relative;
-        left: calc($cursor-width / 2);
-        width: 100%;
-        color: #E4F3FA;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
 
-        &::after {
-          display:table;
-          visibility: hidden;
-          content: "";
-          position: relative;
-          right: 1px;
-          width: $cursor-width;
-          height: $tab-cursor-height;
-          border-radius: 1px;
+      a.nav-link {
+        @include pt-pb(0.6rem);
+
+        display: flex;
+        align-items: center;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        color:#E4F3FA;
+
+        &:hover {
           color: dodgerblue;
           background-color: var(--sidebar-hover-bg);
         }
@@ -822,7 +795,6 @@ $btn-mb: 0.5rem;
           font-size: 90%;
           letter-spacing: 0.2px;
         }
-      }
       }
 
       &.active {
