@@ -227,8 +227,4 @@ jekyll-archives:
     category: /categories/:name/
 
 
-    plugins:
-      #링크 새창 열기
-      - jekyll-target-blank
-
 
