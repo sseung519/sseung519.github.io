@@ -52,9 +52,9 @@ notification:
 # ----- Posts related labels -----
 
 post:
-  written_by: By
-  posted: Posted
-  updated: Updated
+  written_by: "작성자 : "
+  posted: "작성일 : "
+  updated: "마지막 수정일 : "
   words: words
   pageview_measure: views
   read_time:
@@ -75,11 +75,15 @@ post:
 # See: <http://strftime.net/>, <https://day.js.org/docs/en/display/format>
 df:
   post:
-    strftime: "%b %e, %Y"
-    dayjs: "ll"
+#    strftime: "%b %e, %Y"
+#    dayjs: "ll"
+    strftime: "%Y년 %m월 %d일"
+    dayjs: "YYYY년 MM월 DD일"
   archives:
-    strftime: "%b"
-    dayjs: "MMM"
+#    strftime: "%b"
+#    dayjs: "MMM"
+    strftime: "%-m월 %-d일"
+    dayjs: "M월 D일"
 
 # categories page
 categories:
