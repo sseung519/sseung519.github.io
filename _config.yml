@@ -16,10 +16,10 @@ timezone: Asia/Seoul
 
 title: sseung Dev # the main title
 
-tagline: 씅찬이의 개발일지
+tagline: 씅찬이의 개발 공부
 
 description: >- # used by seo meta and the atom feed
-  sseung's Dev blog
+  coding, github, Java, Javascript, MySQL
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
