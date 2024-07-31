@@ -2,8 +2,8 @@
 title: "MySQL, Java : 프로시저와 JDBC"
 date: 2024-07-31 17:07:00 +0900
 last_modified_at: 
-categories: [MySQL], [Java]
-tags: [MySQL], [Java]
+categories: ["MySQL", "Java"]
+tags: ["MySQL", "Java"]
 ---
 # MySQL 저장 프로시저 및 Java 호출 예제
 
