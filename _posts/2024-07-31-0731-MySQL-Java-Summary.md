@@ -1,8 +1,10 @@
 ---
 title: "MySQL, Java : 프로시저와 JDBC"
 date: 2024-07-31 17:07:00 +0900
-last_modified_at: 
-categories: [MySQL]
+last_modified_at:
+categories:
+  - Back-End
+  - MySQL
 tags:
   - MySQL
   - Java
